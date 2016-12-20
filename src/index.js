@@ -1,5 +1,14 @@
 import AWS from 'aws-sdk'
-import BaseStore from '../../../core/server/storage/base'
+
+var BaseStore;
+
+try {
+    BaseStore = require('ghost/core/server/storage/base');
+} catch (e) {
+    if (e.code !== 'MODULE_NOT_FOUND') throw e;
+    BaseStore = require(path.join(process.cwd(), 'core/server/storage/base'));
+}
+
 import { join } from 'path'
 import Promise, { promisify } from 'bluebird'
 import { readFile } from 'fs'
