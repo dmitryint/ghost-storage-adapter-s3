@@ -1,14 +1,4 @@
 import AWS from 'aws-sdk'
-
-var BaseStore;
-
-try {
-    BaseStore = require('ghost/core/server/storage/base');
-} catch (e) {
-    if (e.code !== 'MODULE_NOT_FOUND') throw e;
-    BaseStore = require(path.join(process.cwd(), 'core/server/storage/base'));
-}
-
 import { join } from 'path'
 import Promise, { promisify } from 'bluebird'
 import { readFile } from 'fs'
@@ -16,6 +6,13 @@ import { readFile } from 'fs'
 const readFileAsync = promisify(readFile)
 
 const stripLeadingSlash = s => s.indexOf('/') === 0 ? s.substring(1) : s
+
+try {
+    import BaseStore from 'ghost/core/server/storage/base'
+} catch (e) {
+    if (e.code !== 'MODULE_NOT_FOUND') throw e;
+    import BaseStore from path.join(process.cwd(), 'core/server/storage/base')
+}
 
 class Store extends BaseStore {
   constructor (config = {}) {
